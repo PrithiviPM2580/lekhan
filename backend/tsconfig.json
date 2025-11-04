@@ -12,10 +12,12 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@types/*": ["types/*"]
     }
   },
   "include": [
+    "types/**/*.d.ts",
     "src/**/*.ts",
     "test/**/*.ts",
     "types/**/*.d.ts",
