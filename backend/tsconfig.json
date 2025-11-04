@@ -1,15 +1,25 @@
 {
-	"compilerOptions": {
-		"target": "ES2022",
-		"module": "Node16",
-		"moduleResolution": "Node16",
-		"outDir": "dist",
-		"rootDir": "src",
-		"strict": true,
-		"esModuleInterop": true,
-		"skipLibCheck": true,
-		"forceConsistentCasingInFileNames": true
-	},
-	"include": ["src/**/*.ts"],
-	"exclude": ["node_modules"]
+  "compilerOptions": {
+    "target": "ES2022",
+    "types": ["vitest", "node"], // ✅ Vitest + Node globals available
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "baseUrl": "src",
+    "outDir": "dist",
+    "strict": true,
+    "removeComments": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts",
+    "types/**/*.d.ts",
+    "vitest.config.ts"
+  ], // ✅ Add tests + config
+  "exclude": ["node_modules", "dist"] // ✅ Optional improvement
 }
