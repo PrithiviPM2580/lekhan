@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { APIError } from "utils/index.utils.js";
 
-const validateSchema = <T>(schema: z.ZodType<T>, data: unknown): T => {
+const validate = <T>(schema: z.ZodType<T>, data: unknown): T => {
   const parsed = schema.safeParse(data);
 
   if (!parsed.success) {
@@ -18,4 +18,4 @@ const validateSchema = <T>(schema: z.ZodType<T>, data: unknown): T => {
   return parsed.data;
 };
 
-export default validateSchema;
+export default validate;
