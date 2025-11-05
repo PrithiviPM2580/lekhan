@@ -18,3 +18,5 @@ const logRequest = ({ req, res, message, data, error }: LogOptions) => {
 
   error ? logger.error(message, meta) : logger.info(message, meta);
 };
+
+export default logRequest;
