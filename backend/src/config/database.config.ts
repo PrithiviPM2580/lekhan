@@ -32,7 +32,6 @@ export const connectToDatabase = async () => {
         },
       ],
     });
-    process.exit(1);
   }
   if (isConnected) return;
 
@@ -93,3 +92,9 @@ export const gracefullyShutdownDatabase = async (server: any) => {
     });
   }
 };
+
+mongoose.connection.on("connected", () => logger.info("📡 MongoDB connected"));
+mongoose.connection.on("error", (err) => logger.error("⚠️ MongoDB error", err));
+mongoose.connection.on("disconnected", () =>
+  logger.warn("❌ MongoDB disconnected")
+);
