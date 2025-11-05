@@ -4,12 +4,12 @@ import type { Response, Request } from "express";
 export class APIError extends Error {
   public readonly statusCode: number;
   public readonly success: boolean;
-  public readonly error: string | { type: string; details?: ErrorDetail[] };
+  public readonly error?: string | { type: string; details?: ErrorDetail[] };
 
   constructor(
     statusCode: number = 500,
     message: string = "Something went wrong",
-    error: APIErrorType,
+    error?: APIErrorType,
     stack?: string
   ) {
     super(message);
