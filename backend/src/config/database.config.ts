@@ -71,3 +71,25 @@ export const disconnectFromDatabase = async () => {
     });
   }
 };
+
+export const gracefullyShutdownDatabase = async (server: any) => {
+  logger.warn("⚠️ Server shutting down...");
+  try {
+    await disconnectFromDatabase();
+  } catch (error) {
+    logger.error("❌Error gracefully shutting down the database", { error });
+    throw new APIError(500, "Database shutdown failed", {
+      type: "DatabaseError",
+      details: [
+        {
+          message: (error as Error).message,
+        },
+      ],
+    });
+  } finally {
+    server.close(() => {
+      logger.info("✅ HTTP server closed");
+      process.exit(0);
+    });
+  }
+};
