@@ -3,6 +3,11 @@ import logger from "lib/logger.lib.js";
 import config from "./envValidation.config.js";
 import { APIError } from "utils/index.utils.js";
 
+const errorMessage = {
+  message: "Sample error message",
+  code: 500,
+};
+
 const connectOptions: ConnectOptions = {
   dbName: config.DB_NAME,
   appName: config.APP_NAME,
@@ -22,7 +27,9 @@ let isConnected = false;
 
 export const connectToDatabase = async () => {
   if (!config.DB_URI) {
-    logger.error("Database URI is not defined in the environment variables.");
+    logger.error("Database URI is not defined in the environment variables.", {
+      label: "DatabaseConfig",
+    });
     throw new APIError(500, "Database URI is not defined", {
       type: "DatabaseError",
       details: [
@@ -38,9 +45,15 @@ export const connectToDatabase = async () => {
   try {
     await mongoose.connect(config.DB_URI, connectOptions);
     isConnected = true;
-    logger.info("✅ Connected to the database successfully");
+    logger.info("✅ Connected to the database successfully", {
+      label: "DatabaseConfig",
+      errorMessage,
+    });
   } catch (error) {
-    logger.error("❌Error connecting to the database", { error });
+    logger.error("❌Error connecting to the database", {
+      error,
+      label: "DatabaseConfig",
+    });
     throw new APIError(500, "Database connection failed", {
       type: "DatabaseError",
       details: [
@@ -59,7 +72,10 @@ export const disconnectFromDatabase = async () => {
     isConnected = false;
     logger.info("🛑 Disconnected from the database successfully");
   } catch (error) {
-    logger.error("❌Error disconnecting from the database", { error });
+    logger.error("❌Error disconnecting from the database", {
+      label: "DatabaseConfig",
+      error,
+    });
     throw new APIError(500, "Database disconnection failed", {
       type: "DatabaseError",
       details: [
