@@ -14,6 +14,12 @@ declare global {
     data?: unknown;
     error?: unknown;
   }
+
+  interface SuccessResponse<T> {
+    success: boolean;
+    message: string;
+    data: T;
+  }
 }
 
 export {};

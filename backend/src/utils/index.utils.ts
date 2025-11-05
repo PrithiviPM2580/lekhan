@@ -1,4 +1,5 @@
 import logger from "lib/logger.lib.js";
+import type { Response, Request } from "express";
 
 export class APIError extends Error {
   public readonly statusCode: number;
@@ -43,4 +44,25 @@ export const logRequest = ({ req, res, message, data, error }: LogOptions) => {
   if (error) meta.error = error;
 
   error ? logger.error(message, meta) : logger.info(message, meta);
+};
+
+export const successResponse = <T>(
+  res: Response,
+  req: Request,
+  statusCode: number = 200,
+  message: string,
+  data: T
+) => {
+  logRequest({
+    req,
+    res,
+    message: "Success Response",
+    data,
+  });
+
+  res.status(statusCode).json({
+    success: true,
+    message,
+    data,
+  });
 };
