@@ -8,7 +8,7 @@ import logger from "lib/logger.lib.js";
 
 const PORT = config.PORT || 3000;
 
-(async () => {
+const startServer = async () => {
   try {
     await connectToDatabase();
     const server = app.listen(PORT, () => {
@@ -20,4 +20,6 @@ const PORT = config.PORT || 3000;
     logger.error("❌Error starting the server", { error });
     process.exit(1);
   }
-})();
+};
+
+export default startServer;
