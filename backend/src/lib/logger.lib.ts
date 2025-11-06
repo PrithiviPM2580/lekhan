@@ -25,9 +25,7 @@ const customFormat = combine(
       Object.entries(meta).filter(([key]) => typeof key === "string")
     );
     const metaStr = Object.keys(cleanMeta).length
-      ? `\n${chalk.green(
-          util.inspect(cleanMeta, { depth: null, colors: true })
-        )}`
+      ? `\n${JSON.stringify(cleanMeta, null, 2)}`
       : "";
 
     switch (level) {

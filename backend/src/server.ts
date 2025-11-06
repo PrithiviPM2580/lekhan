@@ -17,7 +17,7 @@ const startServer = async () => {
     process.on("SIGINT", () => gracefullyShutdownDatabase(server));
     process.on("SIGTERM", () => gracefullyShutdownDatabase(server));
   } catch (error) {
-    logger.error("❌Error starting the server", { error });
+    logger.error("❌ Error starting the server", { label: "Server", error });
     process.exit(1);
   }
 };

@@ -3,11 +3,6 @@ import logger from "lib/logger.lib.js";
 import config from "./envValidation.config.js";
 import { APIError } from "utils/index.utils.js";
 
-const errorMessage = {
-  message: "Sample error message",
-  code: 500,
-};
-
 const connectOptions: ConnectOptions = {
   dbName: config.DB_NAME,
   appName: config.APP_NAME,
@@ -47,10 +42,9 @@ export const connectToDatabase = async () => {
     isConnected = true;
     logger.info("✅ Connected to the database successfully", {
       label: "DatabaseConfig",
-      errorMessage,
     });
   } catch (error) {
-    logger.error("❌Error connecting to the database", {
+    logger.error("❌ Error connecting to the database", {
       error,
       label: "DatabaseConfig",
     });
@@ -72,7 +66,7 @@ export const disconnectFromDatabase = async () => {
     isConnected = false;
     logger.info("🛑 Disconnected from the database successfully");
   } catch (error) {
-    logger.error("❌Error disconnecting from the database", {
+    logger.error("❌ Error disconnecting from the database", {
       label: "DatabaseConfig",
       error,
     });
@@ -92,7 +86,10 @@ export const gracefullyShutdownDatabase = async (server: any) => {
   try {
     await disconnectFromDatabase();
   } catch (error) {
-    logger.error("❌Error gracefully shutting down the database", { error });
+    logger.error("❌ Error gracefully shutting down the database", {
+      label: "DatabaseConfig",
+      error,
+    });
     throw new APIError(500, "Database shutdown failed", {
       type: "DatabaseError",
       details: [
@@ -103,7 +100,7 @@ export const gracefullyShutdownDatabase = async (server: any) => {
     });
   } finally {
     server.close(() => {
-      logger.info("✅ HTTP server closed");
+      logger.info("✅ Server closed successfully");
       process.exit(0);
     });
   }
