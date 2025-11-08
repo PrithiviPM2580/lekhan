@@ -1,6 +1,13 @@
 import validate from "lib/validate.lib.js";
 import envValidationSchema from "validators/env.validator.js";
-import "dotenv/config";
+import dotenv from "dotenv";
+
+const envFile =
+  process.env.NODE_ENV === "production"
+    ? ".env.production"
+    : ".env.development";
+
+dotenv.config({ path: envFile });
 
 const envConfig = {
   PORT: process.env.PORT!,

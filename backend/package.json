@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch -r tsconfig-paths/register src/index.ts",
-    "start": "node dist/src/index.js",
+    "dev": "cross-env NODE_ENV=development tsx watch -r tsconfig-paths/register src/index.ts",
+    "start": "cross-env NODE_ENV=production node dist/src/index.js",
     "build": "tsc",
     "type-check": "tsc --noEmit",
     "format": "biome format --write",
@@ -41,6 +41,7 @@
     "@types/node": "^24.10.0",
     "@types/supertest": "^6.0.3",
     "chalk": "^5.6.2",
+    "cross-env": "^10.1.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.6",
     "mongodb-memory-server": "^10.3.0",
