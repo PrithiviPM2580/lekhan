@@ -1,0 +1,25 @@
+# Development Dockerfile for Backend
+
+# Base Image
+FROM node:20-alpine 
+
+# Set working directory
+WORKDIR /app
+
+# Install pnpm globally
+RUN npm install -g pnpm
+
+# Copy dependency files
+COPY pnpm-lock.yaml package.json ./
+
+# Install dependencies
+RUN pnpm install
+
+# Copy application source code
+COPY . .
+
+# Expose application port
+EXPOSE 3000
+
+# Start the development server
+CMD [ "pnpm", "run", "dev" ]
