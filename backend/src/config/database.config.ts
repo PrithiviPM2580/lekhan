@@ -40,9 +40,12 @@ export const connectToDatabase = async () => {
   try {
     await mongoose.connect(config.DB_URI, connectOptions);
     isConnected = true;
-    logger.info("✅ Connected to the database successfully", {
-      label: "DatabaseConfig",
-    });
+    logger.info(
+      `✅ Connected to the database successfully in ${config.NODE_ENV}`,
+      {
+        label: "DatabaseConfig",
+      }
+    );
   } catch (error) {
     logger.error("❌ Error connecting to the database", {
       error,

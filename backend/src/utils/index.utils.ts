@@ -79,3 +79,10 @@ export const successResponse = <T>(
     data,
   });
 };
+
+export const keyFn = (req: Request): string => {
+  if (req.user && req.user.userId) {
+    return `user-${req.user.userId.toString()}`;
+  }
+  return `ip-${req.ip}`;
+};
