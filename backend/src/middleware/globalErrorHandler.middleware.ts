@@ -1,11 +1,9 @@
 import { logRequest } from "utils/index.utils.js";
 import { Request, Response, NextFunction } from "express";
 import { APIError } from "utils/index.utils.js";
-import {
-  TokenExpiredError,
-  JsonWebTokenError,
-  NotBeforeError,
-} from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+
+const { JsonWebTokenError, TokenExpiredError, NotBeforeError } = jwt;
 
 const globalErrorHandler = (
   err: unknown,

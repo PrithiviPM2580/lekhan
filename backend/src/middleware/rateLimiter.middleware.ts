@@ -46,45 +46,44 @@ export const limiters = {
 };
 
 const rateLimiter =
-  (limiter: RateLimiterMemory, keyFn: (req: Request) => string) =>
+  (limiter: RateLimiterMemory, keyGetter: (req: Request) => string) =>
   async (req: Request, res: Response, next: NextFunction) => {
+    const key = keyGetter(req);
     try {
-      const rateRes: RateLimiterRes = await limiter.consume(keyFn(req));
+      const rateRes = await limiter.consume(key);
 
-      res.setHeader("X-RateLimit-Limit", limiter.points.toString());
-      res.setHeader(
-        "X-RateLimit-Remaining",
-        rateRes.remainingPoints.toString()
-      );
-      res.setHeader(
-        "X-RateLimit-Reset",
-        new Date(Date.now() + rateRes.msBeforeNext).toISOString()
-      );
+      res.set({
+        "X-RateLimit-Limit": limiter.points.toString(),
+        "X-RateLimit-Remaining": rateRes.remainingPoints.toString(),
+        "X-RateLimit-Reset": new Date(
+          Date.now() + rateRes.msBeforeNext
+        ).toISOString(),
+      });
 
       next();
     } catch (error) {
       if (error instanceof RateLimiterRes) {
-        res.setHeader(
-          "Retry-After",
-          Math.ceil(error.msBeforeNext / 1000).toString()
-        );
-        res.setHeader("X-RateLimit-Limit", limiter.points.toString());
-        res.setHeader("X-RateLimit-Remaining", "0");
-        res.setHeader(
-          "X-RateLimit-Reset",
-          new Date(Date.now() + error.msBeforeNext).toISOString()
-        );
+        res.set({
+          "Retry-After": Math.ceil(error.msBeforeNext / 1000).toString(),
+          "X-RateLimit-Limit": limiter.points.toString(),
+          "X-RateLimit-Remaining": "0",
+          "X-RateLimit-Reset": new Date(
+            Date.now() + error.msBeforeNext
+          ).toISOString(),
+        });
 
         logger.warn(
-          `Rate limit exceeded: key=${keyFn(req)}, limit=${
-            limiter.points
-          }, resetIn=${error.msBeforeNext}ms`
+          `Rate limit exceeded: key=${key}, limit=${limiter.points}, resetIn=${error.msBeforeNext}ms`
         );
+
         return next(
           new APIError(429, "Too Many Requests - Please try again later")
         );
       }
+
       logger.error("Rate Limit Error", error);
       next(error);
     }
   };
+
+export default rateLimiter;
